@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dissertation Tables — Jonathan Duque González</title>
+    <style>
+        :root {
+            --primary-blue: #1a365d;
+            --secondary-blue: #2c5282;
+            --accent-blue: #3182ce;
+            --light-blue: #e6f0ff;
+            --border-gray: #cbd5e0;
+            --text-dark: #1a202c;
+            --text-muted: #718096;
+            --success-green: #276749;
+            --warning-amber: #c05621;
+            --danger-red: #c53030;
+            --bg-light: #f7fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: var(--primary-blue);
+            border-bottom: 3px solid var(--accent-blue);
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        h2 {
+            color: var(--secondary-blue);
+            margin-top: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .table-caption {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+            overflow: hidden;
+            margin-bottom: 3rem;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; /* Match body font */
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+        }
+        
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border-gray);
+            vertical-align: top;
+        }
+        
+        tbody tr:hover {
+            background: var(--light-blue);
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Alternating row colors */
+        tbody tr:nth-child(even) {
+            background: #fafbfc;
+        }
+        
+        tbody tr:nth-child(even):hover {
+            background: var(--light-blue);
+        }
+        
+        /* Status badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        
+        .badge-prescriptive {
+            background: #fed7d7;
+            color: var(--danger-red);
+        }
+        
+        .badge-predictive {
+            background: #fefcbf;
+            color: #975a16;
+        }
+        
+        .badge-diagnostic {
+            background: #c6f6d5;
+            color: var(--success-green);
+        }
+        
+        .badge-descriptive {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        /* Metric highlighting */
+        .metric-positive {
+            color: var(--success-green);
+            font-weight: 600;
+        }
+        
+        .metric-negative {
+            color: var(--danger-red);
+            font-weight: 600;
+        }
+        
+        .metric-neutral {
+            color: var(--warning-amber);
+            font-weight: 600;
+        }
+        
+        /* TOE dimension colors */
+        .toe-tech {
+            border-left: 4px solid #3182ce;
+        }
+        
+        .toe-org {
+            border-left: 4px solid #805ad5;
+        }
+        
+        .toe-env {
+            border-left: 4px solid #38a169;
+        }
+        
+        /* Small text for sources */
+        .source-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f7fafc;
+            border-top: 1px solid var(--border-gray);
+        }
+        
+        /* Rank indicators */
+        .rank {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+        
+        .rank-1 { background: #ffd700; color: #1a202c; }
+        .rank-2 { background: #c0c0c0; color: #1a202c; }
+        .rank-3 { background: #cd7f32; color: white; }
+        .rank-other { background: #e2e8f0; color: #4a5568; }
+        
+        /* Percentage bars */
+        .percent-bar-container {
+            width: 100%;
+            background: #e2e8f0;
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+        }
+        
+        .percent-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .percent-bar-good { background: linear-gradient(90deg, #48bb78, #38a169); }
+        .percent-bar-medium { background: linear-gradient(90deg, #ecc94b, #d69e2e); }
+        .percent-bar-poor { background: linear-gradient(90deg, #fc8181, #c53030); }
+        
+        /* Print styles */
+        @media print {
+            body { padding: 0; background: white; }
+            .table-container { box-shadow: none; border: 1px solid #ccc; }
+        }
+        
+        /* Adjust font size and padding for List of Abbreviations */
+        .table-container table {
+            font-size: 1rem; /* Increased font size for definitions */
+        }
+        .table-container table td {
+            padding: 0.5rem; /* Reduced padding */
+        }
+        
+        /* Compact List of Abbreviations */
+        .abbreviations-container {
+            max-width: 700px;          /* ⬅ key: controls overall width */
+            margin: 0 auto 3rem auto;  /* centered */
+        }
+
+        .abbreviations-container table {
+            width: 100%;
+            font-size: 0.8rem;
+        }
+
+        .abbreviations-container th {
+            padding: 0.4rem 0.5rem;
+        }
+
+        .abbreviations-container td {
+            padding: 0.35rem 0.5rem;
+            line-height: 1.3;
+        }
+
+        .abbreviations-container th:nth-child(1),
+        .abbreviations-container th:nth-child(3),
+        .abbreviations-container td:nth-child(1),
+        .abbreviations-container td:nth-child(3) {
+            width: 70px;               /* Abbrev columns stay tight */
+            white-space: nowrap;
+        }
+
+        .abbreviations-container th:nth-child(2),
+        .abbreviations-container th:nth-child(4),
+        .abbreviations-container td:nth-child(2),
+        .abbreviations-container td:nth-child(4) {
+            width: auto;               /* Definitions flex */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Dissertation Tables</h1>
+<p style="color: var(--text-muted);">The Role of Big Data in Optimising Inventory Management in the UK Food Retail Industry<br>
+Jonathan Duque González — BA (Hons) Global Business Management</p>
+
+<h2>Table 1.1: Key Data Generation Metrics</h2>
+<p class="table-caption">Weekly data volumes demonstrating the scale of big data generation in UK food retail.</p>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Retailer</th>
+                <th>Metric</th>
+                <th>Volume (Weekly)</th>
+                <th>Data Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Tesco</strong></td>
+                <td>Online orders</td>
+                <td class="metric-positive">1.33 million</td>
+                <td>Transactional</td>
+            </tr>
+            <tr>
+                <td><strong>Tesco</strong></td>
+                <td>Clubcard members</td>
+                <td class="metric-positive">23 million</td>
+                <td>Behavioural</td>
+            </tr>
+            <tr>
+                <td><strong>Sainsbury's</strong></td>
+                <td>Personalised offers</td>
+                <td class="metric-positive">500 million</td>
+                <td>Marketing</td>
+            </tr>
+            <tr>
+                <td><strong>Sainsbury's</strong></td>
+                <td>Nectar members</td>
+                <td class="metric-positive">24 million</td>
+                <td>Behavioural</td>
+            </tr>
+            <tr>
+                <td><strong>Ocado</strong></td>
+                <td>Demand forecasts</td>
+                <td class="metric-positive">Millions daily</td>
+                <td>Predictive</td>
+            </tr>
+            <tr>
+                <td><strong>Morrisons</strong></td>
+                <td>AI camera readings</td>
+                <td class="metric-positive">200,000 units</td>
+                <td>Real-time</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="source-note">
+        <strong>Source:</strong> Compiled from corporate annual reports and sustainability reports (FY 2024/25).
+    </div>
+</div>
+
+<h2>Table 3.1: Summary of Methodological Choices</h2>
+<p class="table-caption">Research design aligned with Saunders et al.'s Research Onion framework.</p>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Layer</th>
+                <th>Choice</th>
+                <th>Justification</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Philosophy</strong></td>
+                <td>Interpretivism</td>
+                <td>Corporate disclosures represent subjective organisational narratives requiring interpretation</td>
+            </tr>
+            <tr>
+                <td><strong>Approach</strong></td>
+                <td>Inductive</td>
+                <td>Limited prior empirical investigation necessitates theory building from evidence</td>
+            </tr>
+            <tr>
+                <td><strong>Method</strong></td>
+                <td>Mono-method Qualitative</td>
+                <td>Captures complex contextual factors; quantitative data access restricted</td>
+            </tr>
+            <tr>
+                <td><strong>Strategy</strong></td>
+                <td>Archival/Documentary</td>
+                <td>Comprehensive public disclosures available; direct access commercially sensitive</td>
+            </tr>
+            <tr>
+                <td><strong>Time Horizon</strong></td>
+                <td>Cross-sectional</td>
+                <td>Contemporary FY 2024/25 practices following regulatory changes</td>
+            </tr>
+            <tr>
+                <td><strong>Analysis</strong></td>
+                <td>Thematic (AI-assisted)</td>
+                <td>Semantic interpretation aligned with TOE, SCOR, and 5Vs frameworks</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="source-note">
+        <strong>Source:</strong> Adapted from Saunders et al. (2019) Research Onion framework.
+    </div>
+</div>
+
+<h2>Table 3.2: Validated Extracts Coded to Six Themes Aligned with Research Objectives</h2>
+<p class="table-caption">Distribution of 272 validated extracts across thematic codes.</p>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Theme Code</th>
+                <th>Theme</th>
+                <th>Count</th>
+                <th style="width: 150px;">Distribution</th>
+                <th>Framework Alignment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>TH_01</strong></td>
+                <td>Operational Efficiency</td>
+                <td class="metric-positive">80</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-good" style="width: 29.4%"></div>
+                    </div>
+                </td>
+                <td>SCOR (Plan, Enable)</td>
+            </tr>
+            <tr>
+                <td><strong>TH_02</strong></td>
+                <td>Cost Reduction</td>
+                <td>52</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-good" style="width: 19.1%"></div>
+                    </div>
+                </td>
+                <td>SCOR (Plan, Source)</td>
+            </tr>
+            <tr>
+                <td><strong>TH_03</strong></td>
+                <td>Adoption Barriers</td>
+                <td>47</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-medium" style="width: 17.3%"></div>
+                    </div>
+                </td>
+                <td>TOE (All dimensions)</td>
+            </tr>
+            <tr>
+                <td><strong>TH_04</strong></td>
+                <td>Implementation Enablers</td>
+                <td>35</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-medium" style="width: 12.9%"></div>
+                    </div>
+                </td>
+                <td>TOE (Organisation)</td>
+            </tr>
+            <tr>
+                <td><strong>TH_05</strong></td>
+                <td>External Environment</td>
+                <td>30</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-medium" style="width: 11.0%"></div>
+                    </div>
+                </td>
+                <td>TOE (Environment)</td>
+            </tr>
+            <tr>
+                <td><strong>TH_06</strong></td>
+                <td>Strategic Value</td>
+                <td>28</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-medium" style="width: 10.3%"></div>
+                    </div>
+                </td>
+                <td>5Vs (Value)</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="source-note">
+        <strong>Source:</strong> Author's compilation based on the Secondary Data Extraction Matrix.<br>
+        <strong>Note:</strong> 302 total extracts; 30 exclusions for off-topic content or superseded data. Validation rate: 90.1%.
+    </div>
+</div>
+
+<h2>Table 4.1: Analytics Maturity Across UK Food Retailers</h2>
+<p class="table-caption">Gartner maturity assessment based on corporate disclosures (FY 2024/25).</p>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Retailer</th>
+                <th>Analytics Level</th>
+                <th>Key Capabilities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Ocado Retail</strong></td>
+                <td><span class="badge badge-prescriptive">Prescriptive</span></td>
+                <td>OSP automated replenishment and stock optimisation; OGRP/Auto Frameload robotics (286 UPH peak); 0.49% food waste; 80%+ sold before arrival; ISO 27001 certified; Ocado Ads retail media.</td>
+            </tr>
+            <tr>
+                <td><strong>Tesco</strong></td>
+                <td><span class="badge badge-prescriptive">Prescriptive</span></td>
+                <td>AI route optimisation; automated discount timing tool; AI-powered Clubcard Challenges (10m customers); dunnhumby data science subsidiary; AI governance group; cloud consolidation; AI heat recapture from refrigeration.</td>
+            </tr>
+            <tr>
+                <td><strong>Aldi</strong></td>
+                <td><span class="badge badge-predictive">Predictive</span></td>
+                <td>ML algorithms in advanced replenishment; IRFM predictive monitoring; AI-powered eco2Veritas tracking; S/4HANA and Genpact AI-first partnership.</td>
+            </tr>
+            <tr>
+                <td><strong>Asda</strong></td>
+                <td><span class="badge badge-predictive">Predictive</span></td>
+                <td>Project Future SaaS re-platforming; CDO at Board level; 800+ store inventory rollout; AI apprenticeships; LIDA university partnership. Current inventory method remains descriptive.</td>
+            </tr>
+            <tr>
+                <td><strong>Iceland</strong></td>
+                <td><span class="badge badge-predictive">Predictive</span></td>
+                <td>Dynamic markdown technology (Prescriptive pilot); WiseShelf ML IoT shelving; cero.earth carbon platform; Gander/OLIO real-time surplus integration; 38% waste reduction.</td>
+            </tr>
+            <tr>
+                <td><strong>M&S</strong></td>
+                <td><span class="badge badge-predictive">Predictive</span></td>
+                <td>Relex forecasting system completed; CDO on Executive Committee; Ocado Smart Platform JV (Prescriptive); Mondra carbon data platform; AI-powered cybersecurity SOC; accelerated legacy removal.</td>
+            </tr>
+            <tr>
+                <td><strong>Sainsbury's</strong></td>
+                <td><span class="badge badge-predictive">Predictive</span></td>
+                <td>Enterprise ML food forecasting (+190bps availability); centralised D&A function; Microsoft partnership; ML markdown pilot (Prescriptive); Vet Vision AI; video analytics in 150 stores; 12% Argos stockholding reduction.</td>
+            </tr>
+            <tr>
+                <td><strong>Morrisons</strong></td>
+                <td><span class="badge badge-predictive">Diagnostic / Predictive</span></td>
+                <td>AI shelf cameras with automated alerts; Morrisons Data Hub integrated platform; investment in forecasting/ordering systems; More Card 76% sales penetration; 0.44% surplus rate (sector-leading).</td>
+            </tr>
+            <tr>
+                <td><strong>Waitrose (JLP)</strong></td>
+                <td><span class="badge badge-diagnostic">Diagnostic</span></td>
+                <td>Data-driven HR/DEI insights; hardware-led retail tech (headsets, mobile payments); Land App farm mapping; AI security standard; Just Eat partnership (229 locations); no evidence of enterprise-wide predictive inventory ML.</td>
+            </tr>
+            <tr>
+                <td><strong>Lidl GB</strong></td>
+                <td><span class="badge badge-diagnostic">Diagnostic (Transitioning)</span></td>
+                <td>Lidl Plus 11m users with daily personalisation; Supplier Portal with stock-on-hand data; €1bn SAP failure forced legacy reversion; dedicated Controlling & Analytics teams; Schwarz Digits/STACKIT cloud.</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="source-note">
+        <strong>Source:</strong> Compiled from corporate annual reports (FY 2024/25); classification guided by Gartner (2023), SCOR Model (APICS, 2017), and AIMAA (Gopi, 2024).
+    </div>
+</div>
+
+<h2>Table 4.2: UK Food Retail – Surplus Comparison (2024/25)</h2>
+<p class="table-caption">Standardised comparison using Surplus % of Food Handled metric aligned with FLWP guidance.</p>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 50px;">Rank</th>
+                <th>Retailer</th>
+                <th>Category</th>
+                <th>Total Food Handled (t)</th>
+                <th>Total Surplus (t)</th>
+                <th>Surplus % Handled</th>
+                <th style="width: 100px;">Efficiency</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="rank rank-1">1</span></td>
+                <td><strong>Morrisons</strong></td>
+                <td>Big Four</td>
+                <td>4,851,682</td>
+                <td>21,351</td>
+                <td class="metric-positive">0.44%</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-good" style="width: 100%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="rank rank-2">2</span></td>
+                <td><strong>Aldi</strong></td>
+                <td>Discounter</td>
+                <td>2,889,787</td>
+                <td>13,582</td>
+                <td class="metric-positive">0.47%</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-good" style="width: 94%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="rank rank-3">3</span></td>
+                <td><strong>Iceland</strong></td>
+                <td>Convenience</td>
+                <td>709,487</td>
+                <td>5,534</td>
+                <td>0.78%</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-good" style="width: 77%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="rank rank-other">4</span></td>
+                <td><strong>Sainsbury's</strong></td>
+                <td>Big Four</td>
+                <td>6,364,706</td>
+                <td>54,100</td>
+                <td>0.85%</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-medium" style="width: 70%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="rank rank-other">5</span></td>
+                <td><strong>Tesco</strong></td>
+                <td>Big Four</td>
+                <td>9,822,574</td>
+                <td>99,211</td>
+                <td>1.01%</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-medium" style="width: 56%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="rank rank-other">6</span></td>
+                <td><strong>Lidl</strong></td>
+                <td>Discounter</td>
+                <td>2,889,503</td>
+                <td>52,311</td>
+                <td class="metric-negative">1.81%</td>
+                <td>
+                    <div class="percent-bar-container">
+                        <div class="percent-bar percent-bar-poor" style="width: 24%"></div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="source-note">
+        <strong>Source:</strong> Corporate disclosures FY 2024/25. Calculations by author following FLWP (2016) guidance.<br>
+        <strong>Note:</strong> Four retailers (Ocado, Asda, Waitrose, M&S) excluded due to incomplete data disclosure. Efficiency bar scaled inversely: lower surplus = higher bar.
+    </div>
+</div>
+
+<h2>Table 4.4: Adoption Barriers Mapped to TOE Framework</h2>
+<p class="table-caption">Systematic organisation of barriers using Tornatzky & Fleischer's (1990) TOE Framework.</p>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 140px;">TOE Dimension</th>
+                <th>Barrier</th>
+                <th>Evidence</th>
+                <th style="width: 120px;">Source</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="toe-tech">
+                <td rowspan="8"><strong style="color: #3182ce;">TECHNOLOGICAL</strong></td>
+                <td>Inventory record inaccuracy</td>
+                <td><strong class="metric-negative">60%</strong> of grocery SKUs have inaccurate records</td>
+                <td>ECR Retail Loss</td>
+            </tr>
+            <tr class="toe-tech">
+                <td>Data management barrier</td>
+                <td><strong class="metric-negative">74%</strong> identify data management as primary barrier to scaling AI</td>
+                <td>Capgemini (2025)</td>
+            </tr>
+            <tr class="toe-tech">
+                <td>Low ML/AI adoption</td>
+                <td>Only <strong>20%</strong> using ML tools; 51% investigating</td>
+                <td>Gartner (2023)</td>
+            </tr>
+            <tr class="toe-tech">
+                <td>Automated integration gap</td>
+                <td>Only <strong>7%</strong> have fully automated data integration</td>
+                <td>GS1 UK</td>
+            </tr>
+            <tr class="toe-tech">
+                <td>Phantom inventory</td>
+                <td>Systems show stock that doesn't physically exist, blocking POS signals</td>
+                <td>ECR Retail Loss</td>
+            </tr>
+            <tr class="toe-tech">
+                <td>Data quality gaps</td>
+                <td>Only <strong>38%</strong> report data 'fully accurate and up to date'</td>
+                <td>BearingPoint (2024)</td>
+            </tr>
+            <tr class="toe-tech">
+                <td>Legacy IT constraints</td>
+                <td><strong>29%</strong> cite legacy systems as barrier to data transparency</td>
+                <td>M&S (2025)</td>
+            </tr>
+            <tr class="toe-tech">
+                <td>Security/privacy concerns</td>
+                <td><strong>38%</strong> cite security and data privacy as top integration challenge</td>
+                <td>BearingPoint (2024)</td>
+            </tr>
+            <tr class="toe-org">
+                <td rowspan="7"><strong style="color: #805ad5;">ORGANISATIONAL</strong></td>
+                <td>Unclear use cases</td>
+                <td><strong class="metric-negative">52%</strong> cite 'establishing clear use case' as top 3 challenge</td>
+                <td>Gartner (2023)</td>
+            </tr>
+            <tr class="toe-org">
+                <td>AI talent gap</td>
+                <td>Only <strong>19%</strong> have specialised AI teams driving strategy</td>
+                <td>KPMG (2025)</td>
+            </tr>
+            <tr class="toe-org">
+                <td>Strategic misalignment</td>
+                <td>Only <strong class="metric-negative">15%</strong> report consistent AI-business strategy alignment</td>
+                <td>KPMG (2025)</td>
+            </tr>
+            <tr class="toe-org">
+                <td>Skills shortage</td>
+                <td><strong class="metric-negative">48%</strong> lack internal talent to manage AI/analytics</td>
+                <td>BearingPoint (2024)</td>
+            </tr>
+            <tr class="toe-org">
+                <td>Staff turnover</td>
+                <td><strong class="metric-negative">57.3%</strong> annual employee turnover erodes institutional knowledge</td>
+                <td>BearingPoint (2024)</td>
+            </tr>
+            <tr class="toe-org">
+                <td>Data silos</td>
+                <td>Only <strong>15%</strong> have integrated supply chain data across functions</td>
+                <td>Marsh McLennan (2025)</td>
+            </tr>
+            <tr class="toe-org">
+                <td>Implementation failure</td>
+                <td>Asda's £1bn+ Project Future: 'totally self-inflicted'</td>
+                <td>Financial Times (2025)</td>
+            </tr>
+            <tr class="toe-env">
+                <td rowspan="4"><strong style="color: #38a169;">ENVIRONMENTAL</strong></td>
+                <td>Investment inertia</td>
+                <td><strong class="metric-negative">75%</strong> prefer to wait for AI landscape to stabilise</td>
+                <td>KPMG (2025)</td>
+            </tr>
+            <tr class="toe-env">
+                <td>Legacy infrastructure</td>
+                <td>M&S: 'supply chain well below industry leading standards'</td>
+                <td>M&S (2025)</td>
+            </tr>
+            <tr class="toe-env">
+                <td>Structural underinvestment</td>
+                <td>UK investment <strong>18%</strong> of GDP vs <strong>22%</strong> G7 average</td>
+                <td>World Bank (2024)</td>
+            </tr>
+            <tr class="toe-env">
+                <td>Business pessimism</td>
+                <td><strong class="metric-negative">80%</strong> of business leaders pessimistic; only 7% optimistic</td>
+                <td>IoD (2025)</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="source-note">
+        <strong>Source:</strong> Author's synthesis of secondary data mapped to Tornatzky & Fleischer (1990) TOE Framework.
+    </div>
+</div>
+
+<h2>List of Abbreviations</h2>
+
+<div class="table-container abbreviations-container">
+    
+    <table style="font-size: 0.8rem;">
+        <thead>
+            <tr>
+                <th style="width: 70px;">Abbrev.</th>
+                <th style="width: 250px;">Definition</th>
+                <th style="width: 70px;">Abbrev.</th>
+                <th style="width: 250px;">Definition</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>5Vs</strong></td><td>Volume, Velocity, Variety, Veracity, Value</td>
+                <td><strong>LLM</strong></td><td>Large Language Model</td>
+            </tr>
+            <tr>
+                <td><strong>AI</strong></td><td>Artificial Intelligence</td>
+                <td><strong>M&S</strong></td><td>Marks & Spencer</td>
+            </tr>
+            <tr>
+                <td><strong>APICS</strong></td><td>Association for Supply Chain Management</td>
+                <td><strong>ML</strong></td><td>Machine Learning</td>
+            </tr>
+            <tr>
+                <td><strong>BCG</strong></td><td>Boston Consulting Group</td>
+                <td><strong>NFU</strong></td><td>National Farmers' Union</td>
+            </tr>
+            <tr>
+                <td><strong>BD</strong></td><td>Big Data</td>
+                <td><strong>NIC</strong></td><td>National Insurance Contributions</td>
+            </tr>
+            <tr>
+                <td><strong>bps</strong></td><td>Basis Points (1 bps = 0.01%)</td>
+                <td><strong>NLW</strong></td><td>National Living Wage</td>
+            </tr>
+            <tr>
+                <td><strong>BRC</strong></td><td>British Retail Consortium</td>
+                <td><strong>ONS</strong></td><td>Office for National Statistics</td>
+            </tr>
+            <tr>
+                <td><strong>CEO</strong></td><td>Chief Executive Officer</td>
+                <td><strong>OSP</strong></td><td>Ocado Smart Platform</td>
+            </tr>
+            <tr>
+                <td><strong>CIOT</strong></td><td>Chartered Institute of Taxation</td>
+                <td><strong>PLC</strong></td><td>Public Limited Company</td>
+            </tr>
+            <tr>
+                <td><strong>CIPS</strong></td><td>Chartered Institute of Procurement & Supply</td>
+                <td><strong>RBV</strong></td><td>Resource-Based View</td>
+            </tr>
+            <tr>
+                <td><strong>CMA</strong></td><td>Competition and Markets Authority</td>
+                <td><strong>ROI</strong></td><td>Return on Investment</td>
+            </tr>
+            <tr>
+                <td><strong>CPI</strong></td><td>Consumer Price Index</td>
+                <td><strong>S&OP</strong></td><td>Sales and Operations Planning</td>
+            </tr>
+            <tr>
+                <td><strong>DEFRA</strong></td><td>Dept. for Environment, Food & Rural Affairs</td>
+                <td><strong>SCOR</strong></td><td>Supply Chain Operations Reference</td>
+            </tr>
+            <tr>
+                <td><strong>DOI</strong></td><td>Diffusion of Innovations</td>
+                <td><strong>SECR</strong></td><td>Streamlined Energy and Carbon Reporting</td>
+            </tr>
+            <tr>
+                <td><strong>ECR</strong></td><td>Efficient Consumer Response</td>
+                <td><strong>SKU</strong></td><td>Stock Keeping Unit</td>
+            </tr>
+            <tr>
+                <td><strong>EOQ</strong></td><td>Economic Order Quantity</td>
+                <td><strong>TAM</strong></td><td>Technology Acceptance Model</td>
+            </tr>
+            <tr>
+                <td><strong>FLW</strong></td><td>Food Loss and Waste</td>
+                <td><strong>TOE</strong></td><td>Technology–Organisation–Environment</td>
+            </tr>
+            <tr>
+                <td><strong>FY</strong></td><td>Financial Year</td>
+                <td><strong>UK</strong></td><td>United Kingdom</td>
+            </tr>
+            <tr>
+                <td><strong>GDP</strong></td><td>Gross Domestic Product</td>
+                <td><strong>UKCORI</strong></td><td>UK Committee on Research Integrity</td>
+            </tr>
+            <tr>
+                <td><strong>GFCF</strong></td><td>Gross Fixed Capital Formation</td>
+                <td><strong>UKRIO</strong></td><td>UK Research Integrity Office</td>
+            </tr>
+            <tr>
+                <td><strong>GS1</strong></td><td>Global Standards 1</td>
+                <td><strong>UPH</strong></td><td>Units Per Hour</td>
+            </tr>
+            <tr>
+                <td><strong>HMT</strong></td><td>HM Treasury</td>
+                <td><strong>IGD</strong></td><td>Institute of Grocery Distribution</td>
+            </tr>
+            <tr>
+                <td><strong>IT</strong></td><td>Information Technology</td>
+                <td><strong>VRIN</strong></td><td>Valuable, Rare, Inimitable, Non-substitutable</td>
+            </tr>
+            <tr>
+                <td><strong>JIT</strong></td><td>Just-in-Time</td>
+                <td><strong>WRAP</strong></td><td>Waste and Resources Action Programme</td>
+            </tr>
+            <tr>
+                <td><strong>KPI</strong></td><td>Key Performance Indicator</td>
+                <td><strong>WWF</strong></td><td>World Wide Fund for Nature</td>
+            </tr>
+            <tr>
+                <td><strong>KPMG</strong></td><td>Klynveld Peat Marwick Goerdeler</td>
+                <td><strong>YoY</strong></td><td>Year-on-Year</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2>Section 4.3.2.1: Metric Definitions and Formulas</h2>
+<p class="table-caption">Visual methodology for calculating Surplus % of Food Handled — the key metric for cross-retailer comparison.</p>
+
+<div class="table-container" style="padding: 2rem;">
+    
+    <div style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%); color: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+        <h3 style="margin: 0 0 0.75rem 0; font-size: 1.1rem;">💡 Why Surplus % Handled?</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+                <strong style="color: #fc8181;">Waste</strong> = End-state metric<br>
+                <span style="font-size: 0.85rem; opacity: 0.9;">Measures food discarded (consequence)</span>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+                <strong style="color: #68d391;">Surplus</strong> = Root cause metric<br>
+                <span style="font-size: 0.85rem; opacity: 0.9;">Measures forecasting inaccuracy (cause)</span>
+            </div>
+        </div>
+        <p style="margin: 1rem 0 0 0; font-size: 0.9rem; text-align: center; opacity: 0.95;">
+            To evaluate Big Data's impact on inventory efficiency, we analyse the <em>cause</em>, not just the <em>consequence</em>.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+        
+        <div style="background: #f7fafc; border: 2px solid #3182ce; border-radius: 12px; overflow: hidden;">
+            <div style="background: #3182ce; color: white; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span style="background: white; color: #3182ce; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</span>
+                <span style="font-weight: 600;">Food Handled (tonnes)</span>
+            </div>
+            <div style="padding: 1.25rem;">
+                <p style="font-size: 0.85rem; color: #4a5568; margin-bottom: 1rem;">Total volume flowing through the retailer's operation. Derived using the <strong>mass-balance principle</strong>.</p>
+                <div style="background: white; border: 2px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; text-align: center;">
+                    <div style="font-family: 'Georgia', serif; font-size: 1.3rem;">
+                        <span style="color: #1a365d; font-weight: 600;">Food Handled</span>
+                        <span style="color: #718096; margin: 0 0.5rem;">=</span>
+                        <span style="color: #276749;">Sold</span>
+                        <span style="color: #718096; margin: 0 0.25rem;">+</span>
+                        <span style="color: #c53030;">Waste</span>
+                        <span style="color: #718096; margin: 0 0.25rem;">+</span>
+                        <span style="color: #805ad5;">Redistribution</span>
+                    </div>
+                </div>
+                <p style="font-size: 0.75rem; color: #718096; margin-top: 0.75rem; font-style: italic;">
+                    ⓘ Most retailers do not explicitly disclose this figure. Calculated where inputs must equal outputs.
+                </p>
+            </div>
+        </div>
+
+        <div style="background: #faf5ff; border: 2px solid #805ad5; border-radius: 12px; overflow: hidden;">
+            <div style="background: #805ad5; color: white; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span style="background: white; color: #805ad5; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</span>
+                <span style="font-weight: 600;">Total Surplus (tonnes)</span>
+            </div>
+            <div style="padding: 1.25rem;">
+                <p style="font-size: 0.85rem; color: #4a5568; margin-bottom: 1rem;">Total overstock regardless of outcome. This is the <strong>root cause</strong> metric for forecasting accuracy.</p>
+                <div style="background: white; border: 2px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; text-align: center;">
+                    <div style="font-family: 'Georgia', serif; font-size: 1.3rem;">
+                        <span style="color: #553c9a; font-weight: 600;">Total Surplus</span>
+                        <span style="color: #718096; margin: 0 0.5rem;">=</span>
+                        <span style="color: #c53030;">Waste</span>
+                        <span style="color: #718096; margin: 0 0.25rem;">+</span>
+                        <span style="color: #276749;">Redistribution</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+                    <div style="flex: 1; background: #fed7d7; padding: 0.5rem; border-radius: 6px; text-align: center;">
+                        <span style="font-size: 0.7rem; color: #c53030; font-weight: 600;">WASTE</span><br>
+                        <span style="font-size: 0.65rem; color: #742a2a;">Food discarded</span>
+                    </div>
+                    <div style="flex: 1; background: #c6f6d5; padding: 0.5rem; border-radius: 6px; text-align: center;">
+                        <span style="font-size: 0.7rem; color: #276749; font-weight: 600;">REDISTRIBUTION</span><br>
+                        <span style="font-size: 0.65rem; color: #22543d;">Charity, animal feed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fffff0; border: 2px dashed #d69e2e; border-radius: 12px; overflow: hidden;">
+            <div style="background: #d69e2e; color: white; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span style="background: white; color: #d69e2e; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">2a</span>
+                <span style="font-weight: 600;">Meals → Tonnes Conversion</span>
+                <span style="background: rgba(255,255,255,0.3); padding: 0.125rem 0.5rem; border-radius: 10px; font-size: 0.7rem; margin-left: auto;">OPTIONAL</span>
+            </div>
+            <div style="padding: 1.25rem;">
+                <p style="font-size: 0.85rem; color: #4a5568; margin-bottom: 1rem;">When retailers report redistribution in <strong>meals donated</strong> rather than tonnes.</p>
+                <div style="background: white; border: 2px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; text-align: center;">
+                    <div style="font-family: 'Georgia', serif; font-size: 1.2rem;">
+                        <span style="color: #975a16; font-weight: 600;">Tonnes</span>
+                        <span style="color: #718096; margin: 0 0.5rem;">=</span>
+                        <span style="color: #553c9a;">Meals</span>
+                        <span style="color: #718096; margin: 0 0.25rem;">×</span>
+                        <span style="color: #276749;">0.42 kg</span>
+                        <span style="color: #718096; margin: 0 0.25rem;">÷</span>
+                        <span style="color: #3182ce;">1000</span>
+                    </div>
+                </div>
+                <p style="font-size: 0.75rem; color: #718096; margin-top: 0.75rem; font-style: italic;">
+                    📖 Source: WRAP meal weight standard (0.42 kg average meal weight).
+                </p>
+            </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%); border: 3px solid #38a169; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(56, 161, 105, 0.2);">
+            <div style="background: linear-gradient(135deg, #276749 0%, #38a169 100%); color: white; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span style="background: white; color: #276749; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</span>
+                <span style="font-weight: 600;">★ Surplus % of Food Handled</span>
+                <span style="background: rgba(255,255,255,0.3); padding: 0.125rem 0.5rem; border-radius: 10px; font-size: 0.7rem; margin-left: auto;">KEY METRIC</span>
+            </div>
+            <div style="padding: 1.25rem;">
+                <p style="font-size: 0.85rem; color: #22543d; margin-bottom: 1rem;">The definitive formula for comparing retailers' BD analytics efficiency. <strong>Normalised for scale comparison.</strong></p>
+                <div style="background: white; border: 2px solid #276749; border-radius: 8px; padding: 1.5rem; text-align: center;">
+                    <div style="font-family: 'Georgia', serif; font-size: 1.1rem;">
+                        <span style="color: #276749; font-weight: 700;">Surplus %</span>
+                        <span style="color: #718096; margin: 0 0.5rem;">=</span>
+                        <span style="display: inline-block; text-align: center; vertical-align: middle; line-height: 1.4;">
+                            <span style="display: block; border-bottom: 2px solid #1a365d; padding-bottom: 3px; color: #805ad5;">Total Surplus</span>
+                            <span style="display: block; color: #3182ce; padding-top: 3px;">Food Handled</span>
+                        </span>
+                        <span style="color: #718096; margin: 0 0.5rem;">×</span>
+                        <span style="color: #1a365d; font-weight: 600;">100</span>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; padding: 0.75rem; background: #276749; color: white; border-radius: 8px; text-align: center;">
+                    <span style="font-size: 0.9rem; font-weight: 600;">↓ Lower % = Better forecasting = More efficient inventory</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="background: #fff5f5; border: 1px solid #feb2b2; border-radius: 10px; padding: 1.25rem; margin-bottom: 2rem;">
+        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+            <span style="font-size: 1.5rem;">⚠️</span>
+            <div>
+                <h4 style="margin: 0 0 0.5rem 0; color: #c53030; font-size: 0.95rem;">Data Availability Constraint</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #742a2a;">
+                    Of <strong>10 UK retailers</strong> analysed, only <strong>6</strong> reported sufficient data to calculate the Surplus % Handled metric.
+                    <em>Ocado, Asda, Waitrose, and M&S</em> were excluded due to incomplete disclosure of waste, redistribution volumes, or food handled.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h4 style="margin: 0 0 1rem 0; color: #1a365d; font-size: 1rem;">📊 Calculated Results (FY 2024/25)</h4>
+        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.75rem; text-align: center;">
+            <div style="background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%); padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div style="font-weight: 700; color: #276749; font-size: 0.85rem;">Morrisons</div>
+                <div style="font-size: 1.75rem; font-weight: 700; color: #22543d;">0.44%</div>
+                <div style="font-size: 0.7rem; color: #276749; background: white; padding: 0.125rem 0.5rem; border-radius: 10px; display: inline-block;">🥇 Best</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%); padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div style="font-weight: 700; color: #276749; font-size: 0.85rem;">Aldi</div>
+                <div style="font-size: 1.75rem; font-weight: 700, color: #22543d;">0.47%</div>
+                <div style="font-size: 0.7rem; color: #276749; background: white; padding: 0.125rem 0.5rem; border-radius: 10px; display: inline-block;">#2</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%); padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div style="font-weight: 700; color: #285e61; font-size: 0.85rem;">Iceland</div>
+                <div style="font-size: 1.75rem; font-weight: 700, color: #234e52;">0.78%</div>
+                <div style="font-size: 0.7rem; color: #285e61; background: white; padding: 0.125rem 0.5rem; border-radius: 10px; display: inline-block;">#3</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #fefcbf 0%, #faf089 100%); padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div style="font-weight: 700; color: #975a16; font-size: 0.85rem;">Sainsbury's</div>
+                <div style="font-size: 1.75rem; font-weight: 700, color: #744210;">0.85%</div>
+                <div style="font-size: 0.7rem; color: #975a16; background: white; padding: 0.125rem 0.5rem; border-radius: 10px; display: inline-block;">#4</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #fefcbf 0%, #faf089 100%); padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div style="font-weight: 700; color: #975a16; font-size: 0.85rem;">Tesco</div>
+                <div style="font-size: 1.75rem; font-weight: 700, color: #744210;">1.01%</div>
+                <div style="font-size: 0.7rem; color: #975a16; background: white; padding: 0.125rem 0.5rem; border-radius: 10px; display: inline-block;">#5</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%); padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div style="font-weight: 700; color: #c53030; font-size: 0.85rem;">Lidl</div>
+                <div style="font-size: 1.75rem; font-weight: 700, color: #9b2c2c;">1.81%</div>
+                <div style="font-size: 0.7rem; color: #c53030; background: white; padding: 0.125rem 0.5rem; border-radius: 10px; display: inline-block;">⚠️ Highest</div>
+            </div>
+        </div>
+        <div style="margin-top: 1.25rem; padding: 1rem; background: #ebf8ff; border-radius: 8px; border-left: 4px solid #3182ce;">
+            <p style="margin: 0; font-size: 0.85rem; color: #2c5282;">
+                <strong>🔍 Key Finding:</strong> Lidl's surplus rate is <strong>3.9× higher</strong> than Aldi's despite similar business models — suggesting availability may be achieved through <em>overstocking</em> rather than forecasting precision.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-gray); color: var(--text-muted); font-size: 0.875rem;">
+    <p>© 2026 Jonathan Duque González — University of Suffolk<br>
+    BA (Hons) Global Business Management Dissertation</p>
+</footer>
+
+</body>
+</html>
